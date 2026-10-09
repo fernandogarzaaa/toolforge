@@ -23,7 +23,7 @@ data:
 
 sft:
   output_dir: outputs/sft
-  num_examples: 160           # first 160 of train.jsonl (mixed categories); 20 optimizer steps
+  num_examples: 400           # first 400 of train.jsonl (mixed categories); 50 optimizer steps
   max_length: 512
   epochs: 1
   lr: 2.0e-4
@@ -40,7 +40,7 @@ sft:
 dpo:
   output_dir: outputs/dpo
   sft_adapter: outputs/sft/adapter
-  num_prompts: 40             # 5 optimizer steps of 8 pairs
+  num_prompts: 64             # up to 8 optimizer steps of 8 pairs
   samples_per_prompt: 1       # greedy only: sampling on CPU is the expensive part
   temperature: 0.8
   max_new_tokens: 96

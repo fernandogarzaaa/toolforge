@@ -340,3 +340,13 @@ def test_only_the_most_informative_synthetic_kind_is_fixed_first():
         assert pairs[0].source == "synthetic:drop_required"
         seconds.add(pairs[1].source)
     assert len(seconds) > 1  # the remaining kinds are shuffled
+
+
+def test_every_synthetic_kind_is_used_when_room_allows():
+    # the shuffle reorders the kinds after the first one; it must never drop any of them
+    ex = call_example(tools=[WEATHER, NEWS])
+    kinds = {k for k, _ in synthetic_negatives(ex)}
+    assert len(kinds) >= 3
+    for seed in range(5):
+        pairs = build_pairs([ex], {"e1": [gold_text(ex)]}, max_pairs_per_prompt=10, seed=seed)
+        assert {p.source for p in pairs} == {f"synthetic:{k}" for k in kinds}

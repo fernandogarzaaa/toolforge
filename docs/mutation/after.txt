@@ -1,0 +1,62 @@
+...................................................................................................................................................................................................................................................................................S................................................................SS.S......S...............................................T....................................... 438 mutants
+testteeth: mutation grade for all selected code
+
+src/toolforge/data/clean.py
+  validate_record                    100.0%   39/39  killed  ok
+  normalize_text                     100.0%    1/1   killed  ok
+  user_text                          100.0%    2/2   killed  ok
+  dedup_key                          100.0%    1/1   killed  ok
+  dedup                              100.0%    7/7   killed  ok
+  ngrams                             100.0%    5/5   killed  ok
+  Decontaminator.__init__            100.0%    5/5   killed  ok
+  Decontaminator.is_contaminated     100.0%    5/5   killed  ok
+  Decontaminator.filter              100.0%    5/5   killed  ok
+src/toolforge/formatting.py
+  ToolCall.to_json                   100.0%    2/2   killed  ok
+  ParseResult.attempted_call         100.0%    2/2   killed  ok
+  tojson                             100.0%    2/2   killed  ok
+  as_openai_tool                     100.0%    5/5   killed  ok
+  render_system                      100.0%    6/6   killed  ok
+  render_tool_calls                  100.0%    6/6   killed  ok
+  render_assistant_body              100.0%    4/4   killed  ok
+  render_messages                    100.0%   27/27  killed  ok
+  render_target                      100.0%    5/5   killed  ok
+  _coerce_call                       100.0%   10/10  killed  ok
+  parse_tool_calls                   100.0%   16/16  killed  ok
+src/toolforge/pairs.py
+  <module>                           100.0%    9/9   killed  ok
+  Pair.to_dict                       100.0%    1/1   killed  ok
+  clean_completion                   100.0%    2/2   killed  ok
+  _reason_key                         66.7%    2/3   killed  WEAK
+      L56   constant          `1` -> `2`  [survived]
+  _is_correct                        100.0%    1/1   killed  ok
+  _perturb_value                     100.0%   17/17  killed  ok
+  synthetic_negatives                100.0%   25/25  killed  ok
+  build_pairs                         87.9%   29/33  killed  WEAK
+      L147  comparison        `len(synth) > 1` -> `(len(synth) >= 1)`  [survived]
+      L147  constant          `1` -> `2`  [survived]
+      L148  constant          `1` -> `2`  [survived]
+      L156  remove-call       `seen.add(comp)` -> `pass`  [survived]
+src/toolforge/schema.py
+  normalize_type                     100.0%    4/4   killed  ok
+  _normalize_node                    100.0%    5/5   killed  ok
+  normalize_tool                     100.0%    7/7   killed  ok
+  validate_tool                      100.0%   33/33  killed  ok
+  check_type                         100.0%   25/25  killed  ok
+  validate_call                      100.0%   20/20  killed  ok
+src/toolforge/scorer.py
+  normalize_string                   100.0%    1/1   killed  ok
+  value_matches                      100.0%   35/35  killed  ok
+  params_match                       100.0%   16/16  killed  ok
+  call_matches                       100.0%    7/7   killed  ok
+  _perfect_matching                  100.0%    4/4   killed  ok
+  _perfect_matching.assign           100.0%   13/13  killed  ok
+  score                              100.0%   21/21  killed  ok
+  gold_from_calls                    100.0%    1/1   killed  ok
+
+Mutants: 438  killed: 433  survived: 5  not covered: 0  timeouts: 1
+Failure-path gaps: 0
+Mutation score: 98.9%
+Time: baseline 5.2s, total 680.1s
+Next: `testteeth suggest` prints an agent-ready brief for each surviving mutant.
+EXIT 0

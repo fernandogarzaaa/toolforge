@@ -1,0 +1,69 @@
+{
+  "n_examples": 200,
+  "models": {
+    "base": {
+      "n": 200,
+      "categories": {
+        "bfcl/irrelevance": {
+          "mean": 0.48,
+          "low": 0.34,
+          "high": 0.62,
+          "n": 50
+        },
+        "bfcl/multiple": {
+          "mean": 0.76,
+          "low": 0.64,
+          "high": 0.88,
+          "n": 50
+        },
+        "bfcl/parallel": {
+          "mean": 0.54,
+          "low": 0.4,
+          "high": 0.68,
+          "n": 50
+        },
+        "bfcl/simple": {
+          "mean": 0.82,
+          "low": 0.72,
+          "high": 0.92,
+          "n": 50
+        }
+      },
+      "macro_accuracy": 0.65,
+      "micro_accuracy": {
+        "mean": 0.65,
+        "low": 0.585,
+        "high": 0.715,
+        "n": 200
+      },
+      "relevance": {
+        "call_recall": 1.0,
+        "no_call_accuracy": 0.48,
+        "tp": 150,
+        "fp": 26,
+        "fn": 0,
+        "tn": 24
+      },
+      "error_reasons": {
+        "bfcl/simple": {
+          "malformed_call": 1,
+          "value_mismatch": 6,
+          "missing_param": 2
+        },
+        "bfcl/multiple": {
+          "value_mismatch": 10,
+          "missing_param": 2
+        },
+        "bfcl/parallel": {
+          "malformed_call": 2,
+          "wrong_call_count": 11,
+          "parallel_mismatch": 10
+        },
+        "bfcl/irrelevance": {
+          "spurious_call": 26
+        }
+      }
+    }
+  },
+  "paired_vs_first": {}
+}

@@ -64,6 +64,11 @@ LLAMA_CPP_DIR=~/llama.cpp toolforge export -c configs/cpu_small.yaml
 LLAMA_CPP_BIN=~/llama.cpp/build/bin toolforge serve -c configs/cpu_small.yaml
 ```
 
+**The CPU run takes hours, not minutes.** On the shared 2-vCPU ARM box used for the numbers below,
+`sft` + `dpo` with `configs/cpu_small.yaml` took about two hours of wall time (summed over resumed
+attempts), and each `eval` of 200 BFCL items through llama.cpp a few more minutes per model. To
+check that everything is wired up, run the tiny-model smoke test instead (`make smoke`, about a minute).
+
 Then call it like any OpenAI endpoint:
 
 ```bash
@@ -80,7 +85,7 @@ Any value can be overridden without editing YAML: `toolforge sft -c configs/cpu_
 
 | Config | What it is | Status |
 |---|---|---|
-| `configs/cpu_small.yaml` | bf16 LoRA on the top 8 layers, small subset, 2 CPU threads | **the measured run below** |
+| `configs/cpu_small.yaml` | fp32 LoRA on the top 8 layers, 400-example subset, 2 CPU threads | **the measured run below** |
 | `configs/gpu_qlora.yaml` | 4-bit NF4 QLoRA, all layers, full cleaned set | untested (no GPU) |
 | `configs/smoke.yaml` | tiny random Qwen2, seconds | runs in CI |
 | `notebooks/toolforge_gpu_colab.ipynb`, `scripts/gpu_run.sh` | Colab / Kaggle GPU path | untested (no GPU) |
