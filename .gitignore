@@ -1,0 +1,26 @@
+# environments / caches
+.venv/
+.cache/
+__pycache__/
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+build/
+dist/
+.testteeth*/
+
+# data and artifacts (rebuilt by `toolforge data` / training)
+data/raw/
+data/processed/*.jsonl
+outputs/
+outputs-smoke/
+mlruns/
+wandb/
+*.gguf
+*.safetensors
+
+# scratch
+work/
+tests/.tiny-model/
+tests/.tiny-data/

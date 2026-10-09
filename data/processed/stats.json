@@ -1,0 +1,80 @@
+{
+  "config": {
+    "raw_dir": "data/raw",
+    "out_dir": "data/processed",
+    "card_path": "docs/DATA_CARD.md",
+    "glaive_revision": "e7f4b6456019f5d8bcb991ef0dd67d8ff23221ac",
+    "bfcl_commit": "6ea57973c7a6097fd7c5915698c54c17c5b1b6c8",
+    "bfcl_categories": [
+      "simple",
+      "multiple",
+      "parallel",
+      "irrelevance"
+    ],
+    "bfcl_eval_per_category": {
+      "simple": 50,
+      "multiple": 50,
+      "parallel": 50,
+      "irrelevance": 50
+    },
+    "glaive_eval_per_category": {
+      "simple": 50,
+      "multiple": 50,
+      "irrelevance": 50
+    },
+    "train_per_category": {
+      "simple": 500,
+      "multiple": 500,
+      "irrelevance": 350,
+      "clarify": 150
+    },
+    "dpo_prompts": 400,
+    "decontam_ngram": 8,
+    "max_chars": 2600,
+    "seed": 1234
+  },
+  "glaive_raw_rows": 112960,
+  "glaive_parse_errors": 22,
+  "glaive_no_decision": 34598,
+  "schema_invalid": {
+    "duplicate tool names": 351,
+    "parameters.type must be": 119,
+    "missing required argument": 25,
+    "invalid tool name:": 3,
+    "required is not a list": 3,
+    "property": 3,
+    "unexpected argument": 1,
+    "too long": 1
+  },
+  "valid": 77834,
+  "duplicates_removed": 55624,
+  "category_counts_after_dedup": {
+    "clarify": 4654,
+    "irrelevance": 1882,
+    "multiple": 7718,
+    "simple": 7956
+  },
+  "decontaminated_removed": 9484,
+  "train_size": 1349,
+  "train_categories": {
+    "multiple": 500,
+    "irrelevance": 199,
+    "simple": 500,
+    "clarify": 150
+  },
+  "eval_glaive_size": 150,
+  "eval_glaive_categories": {
+    "simple": 50,
+    "multiple": 50,
+    "irrelevance": 50
+  },
+  "eval_bfcl_size": 200,
+  "eval_bfcl_categories": {
+    "simple": 50,
+    "multiple": 50,
+    "parallel": 50,
+    "irrelevance": 50
+  },
+  "clean_pool_size": 12576,
+  "dpo_prompts": 400
+}

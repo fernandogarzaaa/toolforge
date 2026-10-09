@@ -1,0 +1,7 @@
+.venv
+.cache
+data
+mlruns
+work
+outputs
+!outputs/gguf/*.gguf

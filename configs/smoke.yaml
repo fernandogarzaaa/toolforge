@@ -1,0 +1,47 @@
+# Seconds-long end-to-end run on a tiny random model; used by CI and `make smoke`.
+# The test suite writes the tiny model and data itself and points these paths at a temp dir.
+run_name: smoke
+model:
+  name_or_path: tests/.tiny-model
+  dtype: float32
+  gradient_checkpointing: false
+sft:
+  output_dir: outputs-smoke/sft
+  train_file: tests/.tiny-data/train.jsonl
+  max_length: 512
+  max_steps: 2
+  batch_size: 1
+  grad_accum: 1
+  save_steps: 1
+  logging_steps: 1
+  lora: {r: 4, alpha: 8, dropout: 0.0, target_modules: [q_proj, v_proj]}
+dpo:
+  output_dir: outputs-smoke/dpo
+  sft_adapter: outputs-smoke/sft/adapter
+  prompts_file: tests/.tiny-data/dpo_prompts.jsonl
+  pairs_file: outputs-smoke/dpo/pairs.jsonl
+  generations_file: outputs-smoke/dpo/generations.jsonl
+  samples_per_prompt: 2
+  max_new_tokens: 8
+  max_steps: 2
+  batch_size: 1
+  grad_accum: 1
+  save_steps: 1
+  max_length: 512
+  max_prompt_length: 480
+  lora: {r: 4, alpha: 8, dropout: 0.0, target_modules: [q_proj, v_proj]}
+eval:
+  files: [tests/.tiny-data/eval.jsonl]
+  max_new_tokens: 8
+  batch_size: 2
+  n_bootstrap: 50
+  out_dir: outputs-smoke/results
+  models:
+    - {name: base}
+    - {name: sft, adapters: [outputs-smoke/sft/adapter]}
+    - {name: sft+dpo, adapters: [outputs-smoke/sft/adapter, outputs-smoke/dpo/adapter]}
+export:
+  adapters: [outputs-smoke/sft/adapter, outputs-smoke/dpo/adapter]
+  merged_dir: outputs-smoke/merged
+tracking:
+  backend: none

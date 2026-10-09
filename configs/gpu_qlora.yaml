@@ -1,0 +1,52 @@
+# GPU path (Colab T4 / L4 / A100): QLoRA, 4-bit NF4 base via bitsandbytes, full data, all layers.
+# UNTESTED: written and type-checked, but never executed by the author (no GPU was available).
+run_name: gpu-qlora
+
+model:
+  name_or_path: Qwen/Qwen2.5-0.5B-Instruct   # also try Qwen/Qwen2.5-1.5B-Instruct
+  revision: null
+  dtype: bfloat16                              # use float16 on a T4
+  quantization: 4bit
+  gradient_checkpointing: true
+
+data:
+  bfcl_categories: [simple, multiple, parallel, irrelevance]
+  bfcl_eval_per_category: {}                   # all questions
+  glaive_eval_per_category: {simple: 200, multiple: 200, irrelevance: 200}
+  train_per_category: {simple: 8000, multiple: 8000, irrelevance: 5000, clarify: 2000}
+  dpo_prompts: 3000
+  max_chars: 6000
+
+sft:
+  output_dir: outputs/sft
+  max_length: 1536
+  epochs: 2
+  lr: 2.0e-4
+  batch_size: 8
+  grad_accum: 4
+  save_steps: 200
+  logging_steps: 10
+  lora: {r: 32, alpha: 64, dropout: 0.05}
+
+dpo:
+  output_dir: outputs/dpo
+  num_prompts: 3000
+  samples_per_prompt: 4
+  beta: 0.1
+  lr: 5.0e-6
+  epochs: 1
+  batch_size: 4
+  grad_accum: 4
+  max_length: 1536
+  max_prompt_length: 1280
+  save_steps: 100
+  lora: {r: 32, alpha: 64, dropout: 0.05}
+
+eval:
+  limit_per_category: null
+  batch_size: 16
+  n_bootstrap: 2000
+
+tracking:
+  backend: mlflow
+  mlflow_uri: file:./mlruns
