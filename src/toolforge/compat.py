@@ -55,7 +55,7 @@ class TorchChunkedLogProb:
                 if "mean_logits" in want:
                     extras["mean_logits"].append(logits.mean(-1))
                 if "is_top1" in want:
-                    extras["is_top1"].append((logits.argmax(-1) == tgt).float())
+                    extras["is_top1"].append(logits.argmax(-1) == tgt)  # bool: TRL ANDs it with a mask
         log_probs = torch.cat(logps) if logps else hidden.new_zeros(0) * hidden.sum()
         rest = tuple(torch.cat(extras[k]) if (k in want and extras[k]) else None for k in OUTPUT_ORDER)
         return (log_probs, *rest)

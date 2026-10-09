@@ -7,6 +7,8 @@ set -euo pipefail
 CONFIG=${CONFIG:-configs/cpu_small.yaml}
 PORT=${PORT:-8097}
 THREADS=${THREADS:-2}
+# extra llama-server flags, e.g. LLAMA_SERVER_ARGS="--load-mode none" (no mmap) for models on a network/FUSE file system
+
 : "${LLAMA_CPP_DIR:?set LLAMA_CPP_DIR to a llama.cpp checkout (for convert_hf_to_gguf.py)}"
 : "${LLAMA_CPP_BIN:?set LLAMA_CPP_BIN to the directory containing llama-server}"
 export LD_LIBRARY_PATH="${LLAMA_CPP_BIN}:${LD_LIBRARY_PATH:-}"
@@ -34,7 +36,7 @@ for name in ${MODELS:-base sft sft+dpo}; do
     rm -rf "outputs/merged-${slug}"   # keep only the GGUF
   fi
   "${LLAMA_CPP_BIN}/llama-server" -m "$gguf" --host 127.0.0.1 --port "$PORT" -c 4096 -t "$THREADS" \
-    --alias toolforge -np 1 > "outputs/gguf/server-${slug}.log" 2>&1 &
+    --alias toolforge -np 1 ${LLAMA_SERVER_ARGS:-} > "outputs/gguf/server-${slug}.log" 2>&1 &
   pid=$!
   trap 'kill $pid 2>/dev/null || true' EXIT
   for _ in $(seq 1 150); do

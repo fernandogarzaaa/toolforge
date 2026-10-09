@@ -21,7 +21,7 @@ GLAIVE_FILE = "glaive-function-calling-v2.json"
 def _download(url: str, dest: Path) -> None:
     dest.parent.mkdir(parents=True, exist_ok=True)
     tmp = dest.with_suffix(dest.suffix + ".part")
-    with urllib.request.urlopen(url, timeout=120) as resp, tmp.open("wb") as fh:  # noqa: S310
+    with urllib.request.urlopen(url, timeout=120) as resp, tmp.open("wb") as fh:
         while chunk := resp.read(1 << 20):
             fh.write(chunk)
     tmp.replace(dest)

@@ -102,11 +102,10 @@ def run_dpo(cfg: RunConfig) -> dict[str, Any]:
     from trl import DPOConfig as TRLDPOConfig
     from trl import DPOTrainer
 
+    from toolforge.compat import patch_trl_logprob
     from toolforge.modeling import apply_adapters, load_model, load_tokenizer
     from toolforge.tracking import Tracker, hf_callback
     from toolforge.train_sft import _append_summary, adapt_args, common_args, last_checkpoint, lora_config
-
-    from toolforge.compat import patch_trl_logprob
 
     if patch_trl_logprob():
         print("[toolforge] Triton unavailable: using the pure-PyTorch log-prob path for DPO")

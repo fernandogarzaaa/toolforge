@@ -13,7 +13,6 @@ from typing import Any, Literal
 import yaml
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
-
 BFCLCategory = Literal["simple", "multiple", "parallel", "irrelevance"]
 BFCL_CATEGORIES: tuple[BFCLCategory, ...] = ("simple", "multiple", "parallel", "irrelevance")
 

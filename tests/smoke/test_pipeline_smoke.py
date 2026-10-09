@@ -234,3 +234,26 @@ def test_torch_logprob_fallback_matches_reference():
     assert lss is None and mean is None and top1 is None
     logp.sum().backward()
     assert hidden.grad is not None
+
+
+def test_torch_logprob_fallback_all_outputs_and_top1_is_bool():
+    # TRL computes ``is_top1 & mask.bool()``: a float tensor there raises NotImplementedError on CPU.
+    import torch
+
+    from toolforge.compat import OUTPUT_ORDER, TorchChunkedLogProb
+
+    torch.manual_seed(1)
+    hidden = torch.randn(6, 8)
+    weight = torch.randn(11, 8)
+    targets = torch.tensor([0, 3, 10, 2, 2, 7])
+    logp, ent, lss, mean, top1 = TorchChunkedLogProb.apply(
+        hidden, weight, None, targets, 1.0, 4, None, 1.0, OUTPUT_ORDER
+    )
+    logits = hidden @ weight.t()
+    ref = torch.log_softmax(logits, -1)
+    assert top1.dtype == torch.bool
+    assert torch.equal(top1, logits.argmax(-1) == targets)
+    assert (top1 & torch.ones(6, dtype=torch.bool)).sum().item() == int((logits.argmax(-1) == targets).sum())
+    assert torch.allclose(lss, torch.logsumexp(2 * ref, -1), atol=1e-5)
+    assert torch.allclose(mean, logits.mean(-1), atol=1e-5)
+    assert logp.shape == ent.shape == (6,)

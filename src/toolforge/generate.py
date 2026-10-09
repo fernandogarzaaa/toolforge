@@ -3,8 +3,20 @@
 from __future__ import annotations
 
 import json
+import urllib.parse
 import urllib.request
 from typing import Any, Protocol
+
+LOOPBACK_HOSTS = frozenset({"localhost", "127.0.0.1", "::1"})
+
+
+def opener_for(url: str) -> urllib.request.OpenerDirector:
+    """URL opener for ``url``. Loopback endpoints bypass any HTTP(S)_PROXY set in the environment
+    (a corporate or sandbox proxy cannot reach the local llama-server and answers 404)."""
+    host = urllib.parse.urlsplit(url).hostname or ""
+    if host in LOOPBACK_HOSTS:
+        return urllib.request.build_opener(urllib.request.ProxyHandler({}))
+    return urllib.request.build_opener()
 
 
 class Generator(Protocol):
@@ -48,6 +60,7 @@ class OpenAICompletionsGenerator:
         self.url = endpoint.rstrip("/") + "/completions"
         self.model_id = model_id
         self.timeout = timeout
+        self._opener = opener_for(self.url)
 
     def generate(self, prompts: list[str], max_new_tokens: int, temperature: float = 0.0, seed: int = 0) -> list[str]:
         outs = []
@@ -63,7 +76,7 @@ class OpenAICompletionsGenerator:
             req = urllib.request.Request(
                 self.url, data=json.dumps(body).encode(), headers={"Content-Type": "application/json"}
             )
-            with urllib.request.urlopen(req, timeout=self.timeout) as resp:  # noqa: S310
+            with self._opener.open(req, timeout=self.timeout) as resp:
                 data = json.loads(resp.read())
             outs.append(data["choices"][0]["text"])
         return outs
