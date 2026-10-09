@@ -1,0 +1,83 @@
+.............S...S....................................S.................S..................................S...........................................................................................................................................S..............SSSSSSSSS....S............S............................S....S...........S...S.SS.S......S............................................S..T....................................... 438 mutants
+testteeth: mutation grade for all selected code
+
+src/toolforge/data/clean.py
+  validate_record                    100.0%   39/39  killed  ok
+  normalize_text                     100.0%    1/1   killed  ok
+  user_text                          100.0%    2/2   killed  ok
+  dedup_key                          100.0%    1/1   killed  ok
+  dedup                              100.0%    7/7   killed  ok
+  ngrams                             100.0%    5/5   killed  ok
+  Decontaminator.__init__             80.0%    4/5   killed  WEAK
+      L100  constant          `8` -> `9`  [survived]
+  Decontaminator.is_contaminated     100.0%    5/5   killed  ok
+  Decontaminator.filter              100.0%    5/5   killed  ok
+src/toolforge/formatting.py
+  ToolCall.to_json                   100.0%    2/2   killed  ok
+  ParseResult.attempted_call         100.0%    2/2   killed  ok
+  tojson                             100.0%    2/2   killed  ok
+  as_openai_tool                     100.0%    5/5   killed  ok
+  render_system                      100.0%    6/6   killed  ok
+  render_tool_calls                  100.0%    6/6   killed  ok
+  render_assistant_body              100.0%    4/4   killed  ok
+  render_messages                     96.3%   26/27  killed  WEAK
+      L134  comparison        `i < len(msgs)` -> `(i <= len(msgs))`  [survived]
+  render_target                      100.0%    5/5   killed  ok
+  _coerce_call                       100.0%   10/10  killed  ok
+  parse_tool_calls                   100.0%   16/16  killed  ok
+src/toolforge/pairs.py
+  <module>                             0.0%    0/9   killed  WEAK
+      L25   constant          `0` -> `1`  [survived]
+      L26   constant          `1` -> `2`  [survived]
+      L27   constant          `2` -> `3`  [survived]
+      L28   constant          `3` -> `4`  [survived]
+      L29   constant          `4` -> `5`  [survived]
+      L30   constant          `5` -> `6`  [survived]
+      L31   constant          `6` -> `7`  [survived]
+      L32   constant          `7` -> `8`  [survived]
+      ... 1 more surviving
+  Pair.to_dict                       100.0%    1/1   killed  ok
+  clean_completion                   100.0%    2/2   killed  ok
+  _reason_key                         66.7%    2/3   killed  WEAK
+      L56   constant          `1` -> `2`  [survived]
+  _is_correct                        100.0%    1/1   killed  ok
+  _perturb_value                      94.1%   16/17  killed  WEAK
+      L70   constant          `3` -> `4`  [survived]
+  synthetic_negatives                 96.0%   24/25  killed  WEAK
+      L108  constant          `1` -> `2`  [survived]
+  build_pairs                         78.8%   26/33  killed  WEAK
+      L119  constant          `0` -> `1`  [survived]
+      L143  constant          `1` -> `2`  [survived]
+      L145  comparison        `len(chosen_rejections) < ma...` -> `(len(chosen_rejections) <= ...`  [survived]
+      L147  comparison        `len(synth) > 1` -> `(len(synth) >= 1)`  [survived]
+      L147  constant          `1` -> `2`  [survived]
+      L148  constant          `1` -> `2`  [survived]
+      L156  remove-call       `seen.add(comp)` -> `pass`  [survived]
+src/toolforge/schema.py
+  normalize_type                     100.0%    4/4   killed  ok
+  _normalize_node                    100.0%    5/5   killed  ok
+  normalize_tool                      85.7%    6/7   killed  WEAK
+      L58   boolean           `tool.get("type") == "functi...` -> `(tool.get('type') == 'funct...`  [survived]
+  validate_tool                      100.0%   33/33  killed  ok
+  check_type                         100.0%   25/25  killed  ok
+  validate_call                      100.0%   20/20  killed  ok
+src/toolforge/scorer.py
+  normalize_string                   100.0%    1/1   killed  ok
+  value_matches                       94.3%   33/35  killed  WEAK
+      L53   comparison        `abs(float(value) - float(ac...` -> `(abs(float(value) - float(a...`  [survived]
+      L53   constant          `1.0` -> `2.0`  [survived]
+  params_match                       100.0%   16/16  killed  ok
+  call_matches                        85.7%    6/7   killed  WEAK
+      L90   remove-raise      `raise ValueError("a possibl...` -> `pass`  [survived]
+  _perfect_matching                  100.0%    4/4   killed  ok
+  _perfect_matching.assign            92.3%   12/13  killed  WEAK
+      L110  return-value      `return False` -> `return None`  [survived]
+  score                              100.0%   21/21  killed  ok
+  gold_from_calls                    100.0%    1/1   killed  ok
+
+Mutants: 438  killed: 412  survived: 26  not covered: 0  timeouts: 1
+Failure-path gaps: 0
+Mutation score: 94.1%
+Time: baseline 3.7s, total 587.4s
+Next: `testteeth suggest` prints an agent-ready brief for each surviving mutant.
+EXIT 0

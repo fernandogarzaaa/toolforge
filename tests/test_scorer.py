@@ -200,3 +200,28 @@ def test_gold_from_calls():
     assert score(
         parsed(("f", {"xs": [1, 2]})), gold_from_calls([{"name": "f", "arguments": {"xs": [1, 2]}}]), "simple"
     ).correct
+
+
+# ------------------------------------------------- boundaries found by mutation testing
+
+
+def test_float_tolerance_is_inclusive_and_absolute_below_one():
+    # |value - acceptable| <= 1e-9 * max(1, |acceptable|)
+    assert value_matches(1e-9, 0.0)  # exactly on the boundary: accepted
+    assert not value_matches(1.5e-9, 0.0)  # tolerance does not grow below |acceptable| = 1
+    assert value_matches(1000.0 + 1e-7, 1000.0)  # relative above 1
+    assert not value_matches(1000.0 + 1e-5, 1000.0)
+
+
+@pytest.mark.parametrize("possible", [{}, {"f": {}, "g": {}}])
+def test_call_matches_rejects_malformed_possible_answer(possible):
+    with pytest.raises(ValueError, match="exactly one function"):
+        call_matches(ToolCall("f", {}), possible)
+
+
+def test_perfect_matching_returns_bool():
+    from toolforge.scorer import _perfect_matching
+
+    gold = [{"f": {"x": [1]}}, {"f": {"x": [2]}}]
+    assert _perfect_matching([ToolCall("f", {"x": 2}), ToolCall("f", {"x": 1})], gold) is True
+    assert _perfect_matching([ToolCall("f", {"x": 2}), ToolCall("f", {"x": 2})], gold) is False

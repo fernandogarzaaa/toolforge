@@ -174,3 +174,11 @@ def test_call_not_checked_when_tool_schema_broken():
     broken = {"name": "get_weather", "parameters": {"type": "object", "properties": {}, "required": True}}
     errors = validate_record(rec(tools=[broken]))
     assert errors == ["required is not a list"]
+
+
+def test_decontaminator_default_is_8_word_ngrams():
+    ev = {"messages": [{"role": "user", "content": "one two three four five six seven eight nine ten"}]}
+    d = Decontaminator([ev])
+    assert d.n == 8
+    hit = {"messages": [{"role": "user", "content": "xx two three four five six seven eight nine yy"}]}
+    assert d.is_contaminated(hit)  # shares exactly one 8-gram

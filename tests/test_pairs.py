@@ -257,3 +257,86 @@ def test_synthetic_negative_for_irrelevance_without_tools():
 )
 def test_perturb_value(value, expected):
     assert _perturb_value(value) == expected
+
+
+# ------------------------------------------------- behaviours pinned by mutation testing
+
+
+def test_rejection_preference_order_is_strict_and_complete():
+    from toolforge.pairs import REASON_RANK
+
+    expected = [
+        "value_mismatch",
+        "missing_param",
+        "unexpected_param",
+        "wrong_function",
+        "parallel_mismatch",
+        "wrong_call_count",
+        "spurious_call",
+        "no_call",
+        "malformed_call",
+    ]
+    assert sorted(REASON_RANK, key=REASON_RANK.__getitem__) == expected
+    assert sorted(REASON_RANK.values()) == list(range(len(expected)))
+
+
+def test_perturb_value_rounds_floats_to_three_places():
+    assert _perturb_value(0.1234) == 1.247
+
+
+def test_wrong_function_negative_keeps_the_other_parallel_calls():
+    calls = [{"name": "get_weather", "arguments": {"city": "Paris"}}, {"name": "get_news", "arguments": {"topic": "x"}}]
+    ex = {
+        "id": "p",
+        "category": "parallel",
+        "tools": [WEATHER, NEWS],
+        "messages": [],
+        "target": {"type": "call", "calls": calls},
+        "gold": gold_from_calls(calls),
+    }
+    kinds = dict(synthetic_negatives(ex))
+    parsed = parse_tool_calls(kinds["wrong_function"])
+    assert [c.name for c in parsed.calls] == ["get_news", "get_news"]
+    assert parsed.calls[1].arguments == {"topic": "x"}
+
+
+def test_zero_max_pairs_is_rejected():
+    with pytest.raises(ValueError):
+        build_pairs([call_example()], {}, max_pairs_per_prompt=0)
+
+
+def test_default_seed_is_zero():
+    exs = [call_example(f"e{i}", tools=[WEATHER, NEWS]) for i in range(12)]
+    gens = {e["id"]: [gold_text(e)] for e in exs}
+    assert build_pairs(exs, gens, max_pairs_per_prompt=3) == build_pairs(exs, gens, max_pairs_per_prompt=3, seed=0)
+    assert build_pairs(exs, gens, max_pairs_per_prompt=3) != build_pairs(exs, gens, max_pairs_per_prompt=3, seed=1)
+
+
+def test_ties_keep_generation_order_not_text_order():
+    ex = call_example()
+    later_but_smaller = render_tool_calls([ToolCall("get_weather", {"city": "Aachen", "days": 2})])
+    first = render_tool_calls([ToolCall("get_weather", {"city": "Zurich", "days": 2})])
+    assert first > later_but_smaller
+    assert build_pairs([ex], {"e1": [first, later_but_smaller]}, synthetic=False)[0].rejected == first
+
+
+def test_full_example_does_not_consume_randomness_for_the_next():
+    # an example already filled with model mistakes must not shuffle synthetic kinds, so later
+    # examples get the same synthetic pairs as when built alone
+    bad = call_example("e0")
+    gens = {"e0": [wrong_value(bad), "I cannot help."]}
+    for seed in range(6):
+        ok = call_example("e1", tools=[WEATHER, NEWS])
+        alone = build_pairs([ok], {"e1": [gold_text(ok)]}, max_pairs_per_prompt=2, seed=seed)
+        both = build_pairs([bad, ok], {**gens, "e1": [gold_text(ok)]}, max_pairs_per_prompt=2, seed=seed)
+        assert [p for p in both if p.id == "e1"] == alone
+
+
+def test_only_the_most_informative_synthetic_kind_is_fixed_first():
+    ex = call_example(tools=[WEATHER, NEWS])
+    seconds = set()
+    for seed in range(20):
+        pairs = build_pairs([ex], {"e1": [gold_text(ex)]}, max_pairs_per_prompt=2, seed=seed)
+        assert pairs[0].source == "synthetic:drop_required"
+        seconds.add(pairs[1].source)
+    assert len(seconds) > 1  # the remaining kinds are shuffled

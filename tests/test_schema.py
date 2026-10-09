@@ -231,3 +231,15 @@ def test_unhashable_property_type_is_invalid():
     assert any("unknown type" in e for e in validate_tool(bad))
     bad = {"name": "f", "parameters": {"type": "object", "properties": {"a": {"type": ["string", {"x": 1}]}}}}
     assert any("unknown type" in e for e in validate_tool(bad))
+
+
+def test_normalize_tool_unwraps_only_a_real_openai_wrapper():
+    params = {"type": "object", "properties": {"x": {"type": "string"}}}
+    wrapped = {"type": "function", "function": {"name": "f", "parameters": params}}
+    assert normalize_tool(wrapped)["name"] == "f"
+    # "type": "function" without a nested function object is a bare schema, not a wrapper
+    bare = {"type": "function", "name": "g", "parameters": params}
+    assert normalize_tool(bare)["name"] == "g"
+    # a "function" key without "type": "function" is not unwrapped either
+    odd = {"name": "h", "function": {"name": "inner"}, "parameters": params}
+    assert normalize_tool(odd)["name"] == "h"

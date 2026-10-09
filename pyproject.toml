@@ -104,7 +104,7 @@ paths = [
     "src/toolforge/pairs.py",
     "src/toolforge/formatting.py",
 ]
-test_args = ["tests", "-m", "not smoke and not parity"]
+test_args = ["tests", "--ignore=tests/smoke", "-m", "not smoke and not parity"]  # smoke imports torch at collection
 
 [[tool.mypy.overrides]]
 module = ["torch.*", "transformers.*", "peft.*", "trl.*", "datasets.*", "safetensors.*", "huggingface_hub.*", "mlflow.*", "wandb.*", "tokenizers.*"]

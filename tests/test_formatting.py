@@ -240,3 +240,14 @@ def test_parse_result_default_has_no_attempt():
 def test_toolcall_to_json():
     assert json.loads(ToolCall("f", {"a": "é"}).to_json()) == {"name": "f", "arguments": {"a": "é"}}
     assert "é" in ToolCall("f", {"a": "é"}).to_json()
+
+
+def test_render_messages_conversation_ending_in_tool_responses():
+    msgs = [
+        {"role": "user", "content": "Weather?"},
+        {"role": "assistant", "content": None, "tool_calls": [{"name": "get_weather", "arguments": {"city": "Oslo"}}]},
+        {"role": "tool", "content": "a"},
+        {"role": "tool", "content": "b"},
+    ]
+    text = render_messages(msgs, [WEATHER], add_generation_prompt=False)
+    assert text.endswith("<tool_response>\na\n</tool_response>\n<tool_response>\nb\n</tool_response>" + IM_END + "\n")

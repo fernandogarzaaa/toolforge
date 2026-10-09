@@ -22,7 +22,7 @@ typecheck: ## mypy
 	mypy
 
 test: ## fast unit tests (no torch needed)
-	$(PY) -m pytest -m "not smoke and not parity"
+	$(PY) -m pytest --ignore=tests/smoke -m "not smoke and not parity"
 
 smoke: ## tiny random-model end-to-end run (needs [train])
 	$(PY) -m pytest -m smoke tests/smoke
