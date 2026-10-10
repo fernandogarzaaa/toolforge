@@ -4,6 +4,19 @@ All notable changes are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses
 [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Added
+- Measured CPU run: BFCL results for base, SFT and SFT+DPO (200 items each) with bootstrap CIs,
+  `results/paired_analysis.json` and `scripts/paired_analysis.py` (pairwise paired bootstrap,
+  fixed/broken counts, per-category deltas), `docs/MODEL_CARD.md`, `results/gguf_smoke.json`.
+- `scripts/gguf_stream_merge.py`: low-memory F16 GGUF → Q8_0/F16 rewrite with optional LoRA merge,
+  reading with plain `pread` (no mmap).
+
+### Changed
+- README results, testing and limitations sections filled with the measured numbers, including that
+  this run regressed against the base model and which parts remain untested.
+
 ## [0.1.0] - 2026-10-10
 
 ### Added

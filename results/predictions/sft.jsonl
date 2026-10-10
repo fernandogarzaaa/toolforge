@@ -190,3 +190,11 @@
 {"id": "bfcl-multiple_25", "output": "<tool_call>\n{\"name\": \"video_games.store_price\", \"arguments\": {\"game_title\": \"Assassins Creed Valhalla\", \"platform\": \"PlayStation\", \"region\": \"United States\"}}\n</tool_call>"}
 {"id": "bfcl-multiple_137", "output": "<tool_call>\n{\"name\": \"lawsuit_search\", \"arguments\": {\"company\": \"Google\", \"start_date\": \"2021-01-01\", \"location\": \"California\", \"status\": \"ongoing\"}}\n</tool_call>"}
 {"id": "bfcl-multiple_89", "output": "<tool_call>\n{\"name\": \"recipe_search\", \"arguments\": {\"ingredients\": [\"chicken\", \"mushrooms\"], \"calories\": 500, \"meal\": \"lunch\"}}\n</tool_call>"}
+{"id": "bfcl-multiple_98", "output": "<tool_call>\n{\"name\": \"geometry.circumference\", \"arguments\": {\"radius\": 3}}\n</tool_call>"}
+{"id": "bfcl-multiple_181", "output": "<tool_call>\n{\"name\": \"soccer.get_last_match\", \"arguments\": {\"team_name\": \"Liverpool F.C.\"}}\n</tool_call>"}
+{"id": "bfcl-multiple_118", "output": "<tool_call>\n{\"name\": \"imdb.find_movies_by_actor\", \"arguments\": {\"actor_name\": \"Leonardo DiCaprio\", \"year\": 2010}}\n</tool_call>"}
+{"id": "bfcl-multiple_194", "output": "<tool_call>\n{\"name\": \"get_museum_hours\", \"arguments\": {\"museum_name\": \"Metropolitan Museum of Art\", \"day\": \"Saturday\"}}\n</tool_call>"}
+{"id": "bfcl-multiple_178", "output": "<tool_call>\n{\"name\": \"find_card_in_deck\", \"arguments\": {\"rank\": \"Queen\", \"suit\": \"Hearts\"}}\n</tool_call>"}
+{"id": "bfcl-multiple_120", "output": "<tool_call>\n{\"name\": \"light_travel_time\", \"arguments\": {\"distance_in_light_years\": 4}}\n</tool_call>"}
+{"id": "bfcl-multiple_113", "output": "<tool_call>\n{\"name\": \"calculate_fitness\", \"arguments\": {\"trait_values\": [0.8, 0.7], \"trait_contributions\": [40, 60]}}\n</tool_call>"}
+{"id": "bfcl-multiple_176", "output": "<tool_call>\n{\"name\": \"sports_team.get_schedule\", \"arguments\": {\"team_name\": \"Manchester United\", \"num_of_games\": 6, \"league\": \"Premier League\"}}\n</tool_call>"}

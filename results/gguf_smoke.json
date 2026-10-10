@@ -1,0 +1,71 @@
+{
+  "date": "2026-10-10",
+  "gguf": "outputs/gguf/toolforge-qwen2.5-0.5b-q8_0.gguf (SFT+DPO, Q8_0, made by scripts/gguf_stream_merge.py; not committed)",
+  "gguf_sha256": "516449142ca9f3f567cd10e4d36828d64c7fd26cc35c0812df249581c326657c",
+  "gguf_bytes": 531067648,
+  "llama_cpp": "b11521 (aarch64 CPU build)",
+  "command": "toolforge serve -c configs/cpu_small.yaml -o serve.ctx_size=2048 -o \"serve.extra_args=[-np, '1', --no-repack]\"  ->  llama-server -m outputs/gguf/toolforge-qwen2.5-0.5b-q8_0.gguf --host 127.0.0.1 --port 8091 -c 2048 --alias toolforge --jinja -t 2 -np 1 --no-repack",
+  "request": {
+    "model": "toolforge",
+    "temperature": 0,
+    "messages": [
+      {
+        "role": "user",
+        "content": "What is the weather in Lisbon?"
+      }
+    ],
+    "tools": [
+      {
+        "type": "function",
+        "function": {
+          "name": "get_weather",
+          "description": "Get the current weather for a city",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "city": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "city"
+            ]
+          }
+        }
+      }
+    ]
+  },
+  "response": {
+    "choices": [
+      {
+        "finish_reason": "tool_calls",
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "",
+          "tool_calls": [
+            {
+              "type": "function",
+              "function": {
+                "name": "get_weather",
+                "arguments": "{\"city\": \"Lisbon\"}"
+              },
+              "id": "<random>"
+            }
+          ]
+        }
+      }
+    ],
+    "usage": {
+      "completion_tokens": 22,
+      "prompt_tokens": 171,
+      "total_tokens": 193,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      }
+    },
+    "model": "toolforge",
+    "system_fingerprint": "b11521-b42b7e6d3"
+  },
+  "result": "pass: finish_reason=tool_calls, get_weather({\"city\": \"Lisbon\"})"
+}

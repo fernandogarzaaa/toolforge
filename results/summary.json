@@ -63,7 +63,148 @@
           "spurious_call": 26
         }
       }
+    },
+    "sft": {
+      "n": 200,
+      "categories": {
+        "bfcl/irrelevance": {
+          "mean": 0.42,
+          "low": 0.28,
+          "high": 0.56,
+          "n": 50
+        },
+        "bfcl/multiple": {
+          "mean": 0.68,
+          "low": 0.54,
+          "high": 0.8,
+          "n": 50
+        },
+        "bfcl/parallel": {
+          "mean": 0.44,
+          "low": 0.3,
+          "high": 0.58,
+          "n": 50
+        },
+        "bfcl/simple": {
+          "mean": 0.78,
+          "low": 0.66,
+          "high": 0.88,
+          "n": 50
+        }
+      },
+      "macro_accuracy": 0.5800000000000001,
+      "micro_accuracy": {
+        "mean": 0.58,
+        "low": 0.515,
+        "high": 0.645,
+        "n": 200
+      },
+      "relevance": {
+        "call_recall": 1.0,
+        "no_call_accuracy": 0.42,
+        "tp": 150,
+        "fp": 29,
+        "fn": 0,
+        "tn": 21
+      },
+      "error_reasons": {
+        "bfcl/simple": {
+          "malformed_call": 1,
+          "value_mismatch": 6,
+          "missing_param": 4
+        },
+        "bfcl/multiple": {
+          "value_mismatch": 11,
+          "missing_param": 4,
+          "malformed_call": 1
+        },
+        "bfcl/parallel": {
+          "malformed_call": 2,
+          "wrong_call_count": 12,
+          "parallel_mismatch": 14
+        },
+        "bfcl/irrelevance": {
+          "spurious_call": 29
+        }
+      }
+    },
+    "sft+dpo": {
+      "n": 200,
+      "categories": {
+        "bfcl/irrelevance": {
+          "mean": 0.4,
+          "low": 0.26,
+          "high": 0.54,
+          "n": 50
+        },
+        "bfcl/multiple": {
+          "mean": 0.7,
+          "low": 0.56,
+          "high": 0.82,
+          "n": 50
+        },
+        "bfcl/parallel": {
+          "mean": 0.4,
+          "low": 0.26,
+          "high": 0.54,
+          "n": 50
+        },
+        "bfcl/simple": {
+          "mean": 0.82,
+          "low": 0.7,
+          "high": 0.92,
+          "n": 50
+        }
+      },
+      "macro_accuracy": 0.58,
+      "micro_accuracy": {
+        "mean": 0.58,
+        "low": 0.51,
+        "high": 0.645,
+        "n": 200
+      },
+      "relevance": {
+        "call_recall": 1.0,
+        "no_call_accuracy": 0.4,
+        "tp": 150,
+        "fp": 30,
+        "fn": 0,
+        "tn": 20
+      },
+      "error_reasons": {
+        "bfcl/simple": {
+          "malformed_call": 1,
+          "value_mismatch": 5,
+          "missing_param": 3
+        },
+        "bfcl/multiple": {
+          "value_mismatch": 11,
+          "missing_param": 3,
+          "malformed_call": 1
+        },
+        "bfcl/parallel": {
+          "malformed_call": 2,
+          "wrong_call_count": 15,
+          "parallel_mismatch": 13
+        },
+        "bfcl/irrelevance": {
+          "spurious_call": 30
+        }
+      }
     }
   },
-  "paired_vs_first": {}
+  "paired_vs_first": {
+    "sft - base": {
+      "mean": -0.07,
+      "low": -0.115,
+      "high": -0.03,
+      "n": 200
+    },
+    "sft+dpo - base": {
+      "mean": -0.07,
+      "low": -0.11,
+      "high": -0.035,
+      "n": 200
+    }
+  }
 }
