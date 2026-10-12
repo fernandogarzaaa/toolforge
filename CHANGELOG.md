@@ -6,6 +6,8 @@ All notable changes are documented here. The format follows
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-10-13
+
 ### Added
 - Measured CPU run: BFCL results for base, SFT and SFT+DPO (200 items each) with bootstrap CIs,
   `results/paired_analysis.json` and `scripts/paired_analysis.py` (pairwise paired bootstrap,
