@@ -6,6 +6,17 @@ All notable changes are documented here. The format follows
 
 ## [Unreleased]
 
+## [0.2.1] - 2026-10-13
+
+### Fixed
+- CLI: a malformed YAML config, a missing optional dependency (e.g. running `sft` without the
+  `train` extra) and a missing pipeline input (e.g. `eval` before `data`) now print a one-line
+  error and exit 2 instead of a traceback (#3).
+
+### Changed
+- The release workflow's PyPI upload is opt-in (repo variable `PUBLISH_PYPI == 'true'`); the
+  PyPI name `toolforge` belongs to another project (#2).
+
 ## [0.2.0] - 2026-10-13
 
 ### Added
