@@ -7,6 +7,8 @@ import json
 import sys
 from typing import Any
 
+import yaml
+
 from toolforge import __version__
 from toolforge.config import RunConfig, load_config
 
@@ -63,9 +65,28 @@ def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
     try:
         cfg: RunConfig = load_config(args.config, args.override)
-    except (ValueError, OSError) as exc:
+    except (ValueError, OSError, yaml.YAMLError) as exc:
         print(f"toolforge: invalid config: {exc}", file=sys.stderr)
         return 2
+    try:
+        return _run(args, cfg)
+    except ModuleNotFoundError as exc:
+        print(
+            f"toolforge {args.command}: missing optional dependency {exc.name!r}; "
+            "install the extras it needs, e.g. pip install 'toolforge[train]'",
+            file=sys.stderr,
+        )
+        return 2
+    except FileNotFoundError as exc:
+        print(
+            f"toolforge {args.command}: file not found: {exc.filename or exc} "
+            "(run the earlier pipeline steps first, e.g. `toolforge data`)",
+            file=sys.stderr,
+        )
+        return 2
+
+
+def _run(args: argparse.Namespace, cfg: RunConfig) -> int:
     cmd = args.command
     if cmd == "config":
         _print(cfg.model_dump())
