@@ -40,7 +40,11 @@ jobs:
           generate_release_notes: true
 
   pypi:
+    # The PyPI name "toolforge" belongs to an unrelated project, so this job is
+    # opt-in: it runs only when the repository variable PUBLISH_PYPI is 'true'
+    # (and PYPI_API_TOKEN is set). Do not enable it until the package is renamed.
     needs: build
+    if: vars.PUBLISH_PYPI == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v4
