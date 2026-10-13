@@ -101,3 +101,28 @@ def test_quant_path():
     assert quant_path("out/m-f16.gguf", "Q8_0") == quant_path("out/m.gguf", "Q8_0")
     assert str(quant_path("out/m-f16.gguf", "Q4_K_M")) == os.path.join("out", "m-q4_k_m.gguf")
     assert str(quant_path("m-bf16.gguf", "Q8_0")) == "m-q8_0.gguf"
+
+
+def test_malformed_yaml_config_exit_code(capsys, tmp_path):
+    bad = tmp_path / "bad.yaml"
+    bad.write_text("x: [\n")
+    assert main(["config", "-c", str(bad)]) == 2
+    assert "invalid config" in capsys.readouterr().err
+
+
+def test_missing_optional_dependency_is_reported(capsys, monkeypatch):
+    import toolforge.cli as cli
+
+    def boom(args, cfg):
+        raise ModuleNotFoundError("No module named 'datasets'", name="datasets")
+
+    monkeypatch.setattr(cli, "_run", boom)
+    assert main(["sft"]) == 2
+    err = capsys.readouterr().err
+    assert "'datasets'" in err and "toolforge[train]" in err
+
+
+def test_missing_input_file_is_reported(capsys, tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    assert main(["eval", "-o", "run_name=x"]) == 2
+    assert "file not found" in capsys.readouterr().err
